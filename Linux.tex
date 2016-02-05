@@ -1,0 +1,533 @@
+% Linux Workshop
+% First Edition
+% Created: 16 Oct 2009
+% Last Modified: 12 Nov 2009
+
+\documentclass[11pt,oneside]{article}
+\usepackage{geometry}       % For page margin settings
+\usepackage[T1]{fontenc}    % For font encoding
+\usepackage{tgbonum}
+\usepackage{titlesec}       % Custom section title headers
+\usepackage{listings}       % Code listing sections
+\usepackage[usenames]{color}
+\usepackage{textcomp}
+\usepackage{graphicx}       % Allows bitmap graphics to be imported
+\usepackage{latexsym}       % For symbols
+
+
+\pagestyle{empty}
+\geometry{letterpaper,tmargin=0.75in,bmargin=1in,lmargin=1in,rmargin=1in,headheight=0in,headsep=0in,footskip=.3in}
+
+\setlength{\parindent}{.75cm}
+\setlength{\parskip}{0in}
+\setlength{\itemsep}{0in}
+\setlength{\topsep}{0in}
+\setlength{\tabcolsep}{0in}
+\pagenumbering{arabic}
+\pagestyle{plain}
+
+% Settings for the code blocks
+\lstset{
+    backgroundcolor=\color[rgb]{0.85, 0.85, 0.85},
+    xleftmargin=10pt,
+    xrightmargin=10pt,
+    tabsize=4,
+    language=Java,
+    upquote=true,
+    captionpos=b,
+    columns=[c]fixed,
+    showstringspaces=false,
+    extendedchars=true,
+    breaklines=true,
+    numbers=none,
+    numberstyle=\ttfamily\small,
+    numbersep=8px,
+    frame=single,
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    basicstyle=\small\fontfamily{ppl}\tt,
+    identifierstyle=\ttfamily\small,
+    keywordstyle=\color[rgb]{0,0,0},
+    commentstyle=\color[rgb]{0.133,0.545,0.133},
+    stringstyle=\color[rgb]{0,0,0},
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Name and contact information
+\newcommand{\articleTitle}{Intro to Linux}
+\newcommand{\subtitle}{A Brief, Non-Technical Introduction to GNU/Linux}
+\newcommand{\articleAuthor}{By Daniel Yim}
+\newcommand{\contact}{For the SFASU Computer Science Club}
+\newcommand{\lastUpdated}{March 27, 2010}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% New commands and environments
+
+% Main header
+% Arg 1: Article Title
+% Arg 2: Article Subtitle
+% Arg 3: Article Author
+% Arg 4: Author's contact
+
+\newcommand{\header}[5]{
+	\begin{center}
+        \includegraphics[width=5cm]{tux.png}
+        \\
+        {\fontsize{32pt}{10pt}\selectfont\scshape\bf#1}\\
+        \vspace{0.6ex}
+        {\fontsize{14pt}{10pt}\selectfont#2}\\
+        \vspace{2.0ex}
+        #3\\
+        #4\\
+    \end{center}
+    \vspace{2.0ex}
+}
+
+%   Custom section headers via the titlesec package
+\titleformat{\section}[block]
+{\fontsize{14pt}{10pt}\selectfont\bfseries}{\thesection.}{1em}{}
+
+%   Custom section headers via the titlesec package
+\titleformat{\subsection}[block]
+{\fontsize{13pt}{10pt}\selectfont\bfseries}{}{0em}{}
+
+
+\newenvironment{articleSection}[1]
+{\begin{list}{}
+         {\setlength{\leftmargin}{1cm}}
+         \item[]
+}
+{\end{list}}
+
+\newenvironment{articleSectionN}[1]
+{#1}
+{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Now for the actual document:
+
+\begin{document}
+    % Sets the font type for the whole page
+\fontfamily{ppl}\selectfont
+
+    % Prints the header
+\header{\articleTitle}{\subtitle}{\articleAuthor}{\contact}{\lastUpdated}
+%\hrule
+\vspace{2.0ex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Workshop Objectives}
+\begin{articleSectionN}
+In this workshop we will focus on an introductory approach to Linux and other *nix systems.
+\\
+
+\noindent By the end of this tutorial, you will have learned:
+\begin{itemize}
+\item{The rich history of Unix, the Free Software Foundation and the GNU, the Linux kernel, and GNU/Linux}
+\item{The major Linux distributions}
+\item{The Linux file system organization}
+\item{Basic commands for command-line navigation}
+\item{Advanced command techniques}
+\end{itemize}
+\paragraph{}
+\end{articleSectionN}
+
+
+\section{A Short History of GNU/Linux}
+\begin{articleSectionN}
+\begin{center}
+    \large MULTICS (1964) $\to$ Unix (1969-1970) $\to$ MINIX (1987) $\to$ GNU/Linux (1991)\\
+    \footnotesize Timeline of *nix operating systems and when they were first developed\\
+\end{center}
+\paragraph{}
+\qquad In 1969 scientists at AT\&T Bell Labs began developing an experimental operating system called \textbf{Unix} in the C programming language, which was a visionary move at the time. Due to Unix's use of a high-level machine-independent language, Unix became the first widely used multi-platform operating system.
+    
+    As iterations of Unix releases became heavily commercialized, Richard Stallman, a free software advocate, and his company, the Free Software Foundation (FSF), began the \textbf{GNU project} in 1984, which was a project that sought to create a freely usable, distributable, and modifiable version of the Unix operating system. Although many useful components for the project were created (such as the GNU C library, the Emacs editor, Bourne Again Shell), the \emph{core} of an operating system---the kernel---proved to be the most troublesome to develop. Then along came an astute Finnish student named Linus Torvalds, who provided the final piece of the free software puzzle.$^{1}$
+
+    When a minimalistic Unix-like operating system, \textbf{MINIX}, was written by Andrew Tanenbaum in 1987 as a proof-of-concept for his textbook, Torvalds used ideas from MINIX and began developing a free Unix-like kernel, which he dubbed the "\textbf{Linux}" kernel after himself. Torvolds' creation combined with the efforts of the FSF to create a revolutionary open-source operating system called the \textbf{GNU/Linux} operating system, or more commonly (and mistakingly) known just as \textbf{Linux}.$^{2}$
+    
+% Source:   http://www.dwheeler.com/secure-programs/Secure-Programs-HOWTO/history.html
+%           http://en.wikipedia.org/wiki/Linux
+%           
+   
+\vspace{4pt}
+\end{articleSectionN}
+
+\section{Linux Distributions}
+\begin{articleSectionN}
+    The Linux operating system has come a long way since its inception into the computing community. Many companies and/or interest groups took what Linux did to its predecessor and customized the operating system to suit their specific needs. These custom interpretations are known as \textbf{distributions}. Though every distribution is different in some way, all Linux distributions are unified by a single component: the Linux kernel. Some distributions may or may not include specific packages or GUIs, but they will \emph{always} have the same underlying structure (bash, GNU's glibc, etc.).
+    \\
+    
+\noindent Here is a partial list of popular Linux distributions: $^{3}$
+
+\texttt{
+    \begin{center}
+        \begin{tabular*}{4.5in}{@{\extracolsep{\fill}} l c c r }
+            Red Hat & Fedora & Ubuntu & CentOS\\
+            Slackware & Debian & Mandriva & openSUSE\\
+            Gentoo & Knoppix & Yellow Dog & ...and many others\\
+        \end{tabular*}
+    \end{center}
+}
+\paragraph{}
+
+% Source:   http://en.wikipedia.org/wiki/Linux_distribution#Popular_distributions
+
+   For new users, many Linux veterans recommend \textbf{Ubuntu} (\emph{http://ubuntu.com}), as it is the most user-friendly and the easiest for transitioning from a GUI-heavy Windows or Mac environment. If you are feeling particularly adventurous, you should try compiling a distribution from source or creating your own!
+\end{articleSectionN}
+
+
+\section{File System Organization}
+\begin{articleSectionN}
+
+\noindent Let's take a look at the contents of a basic Linux root ( \lstinline{/} ) directory:
+
+\begin{lstlisting}
+[user@computer ~]$ ls
+bin   dev  home  lost+found  misc  net  proc  sbin  srv  usr
+boot  etc  lib   media       mnt   opt  root  sys   tmp  var
+\end{lstlisting}
+
+In this example, we see 10 directories (or subdirectories) in the root directory ( \lstinline{/} ). Note that most of these directories are the same across all Linux distributions.
+
+The neat thing about any Unix/Unix-like operating system is that the OS stores every entity it has control over in the form of a file. Even hardware devices such as USB ports or printers are stored under the \lstinline{/dev} directory as \textbf{device nodes}. This Unix-exclusive feature promotes transparency between the OS and the user.\\
+\newpage
+\noindent\textbf{Here is a summary of what each directory holds$^{4}$:}\\
+
+\noindent\lstinline{/bin}
+
+    The bare minimum set of binary executable programs required for a user to use the system is stored here. We can expect crucial programs such as the filesystem navigation commands and the shell (\lstinline{bash}) to reside here.\\
+    
+\noindent\lstinline{/dev}
+
+    As stated before, everything in Linux is treated as a file, even hardware devices like USB ports, hard drives, and scanners. In order to access these devices, a special file called a device node has to be present. All device nodes are stored in the \lstinline{/dev} directory.\\
+
+\noindent\lstinline{/etc}
+
+    This directory holds system configuration files. \\
+    
+\noindent\lstinline{/home}
+
+    Linux is a multiuser operating system. Each user on the system is given an account and a unique directory for personal files. This directory is called the user's home directory.\\
+    
+\noindent\lstinline{/lib}
+
+    System libraries that are required for basic operation are stored here. The C library, the dynamic loader, the ncurses library, and kernel modules are among the things stored here.\\
+    
+\noindent\lstinline{/mnt}
+
+    This directory contains temporary mount points for working on hard disks or removable drives. Here you'll also find mount points for your CD-ROM and floppy drives.\\
+
+\noindent\lstinline{/proc}
+
+    This is a unique directory. It's not really part of the filesystem, but a virtual filesystem that provides access to kernel information. Various pieces of information that the kernel wants you to know are conveyed to you through files in the /proc directory. You can also send information to the kernel through some of these files. Try doing cat /proc/cpuinfo.\\
+    
+\noindent\lstinline{/root}
+
+    The system administrator is known as \lstinline{root} on the system. \lstinline{root}'s home directory is kept in \lstinline{/root} instead of \lstinline{/home/root}.\\
+    
+\noindent\lstinline{/tmp}
+
+    The temporary storage location. All files placed in here will automatically be deleted eventually.\\
+
+\noindent\lstinline{/usr}
+
+    This is the big directory on a Linux system. Everything else pretty much goes here, programs, documentation, the kernel source code, and the X Window system. This is the directory to which you will most likely be installing programs.\\
+
+\noindent\lstinline{/var}
+
+    System log files, cache data, and program lock files are stored here. This is the directory for frequently-changing data.\\
+
+%\noindent Paraphrased from the Slackware Users' Manual:\\
+%\noindent\emph{http://www.slackbook.org/html/system-configuration.html\#SYSTEM-CONFIGURATION-LAYOUT}
+    
+\end{articleSectionN}
+
+
+\section{The Command Line Interface}
+\begin{articleSectionN}
+    Unlike the graphical user interfaces (\textbf{GUIs}--pronounced ``gooey'') that we're accustomed to, we will now introduce ourselves to the powerful command line interface (\textbf{CLI}). Although the GUI is enough to do most tasks, the command line offers more control and flexibility. This applies especially for Linux users, as familiarizing ourselves with the command line is very important for executing advanced tasks easily and efficiently.
+
+    In the world of Linux, GUIs may vary between distributions or user preference (the three most popular are \textbf{KDE}, \textbf{GNOME}, and \textbf{Xfce}), but for CLIs, all Linux distributions have the \textbf{the Bourne-Again Shell}, or simply \lstinline{bash} (\textbf{B}ourne-\textbf{A}gain \textbf{Sh}ell). Given that information, we can assume that if we acquaint ourselves with \lstinline{bash}, we'll be able to use almost any Linux CLI, regardless of distribution.
+
+\begin{subsection}{Home Folders}
+    Before we get to commands, we must briefly discuss file structures in Linux. Unix (and Linux) is a multiuser system, meaning that many users can be logged on and use the system at the same time. Amongst directories that are shared across all users, Unix developers also allocated \emph{home} directories (which in Linux is denoted as a tilde \lstinline{~} ) for each user, and all home directories reside within the \textbf{root} (which is denoted as a single forward slash \texttt{/} ) directory.
+
+% Edit this to be more clear... expand on it
+
+\end{subsection}
+
+\begin{subsection}{Pathing}
+We will now explore \emph{pathing} in Linux systems. First, we know that on a Windows system, a path may look something like \lstinline{C:\Windows\System32}, where \lstinline{C:\} denotes a drive letter and backslashes ( \lstinline{\} ) separate levels of folders.
+In Linux/Unix, however, we use forward slashes ( \lstinline{/} ) to separate levels of directories; therefore, a path in Linux would look something like \lstinline{/usr/lib/somefile}.
+
+ There are two types of pathing: \textbf{absolute} (e.g. \lstinline{/usr/lib/somefile}) and \textbf{relative} (e.g. \lstinline{usr/lib/somefile}). The only difference between the two is the preceding forward slash ( \lstinline{/} ) which means to begin traversing directories from the root ( \lstinline{/} ), whereas no preceding forward slash means to begin traversing from the current directory.\\
+
+\noindent That may be hard to understand at first, so let's see an example of a hypothetical file structure, where indentations denote directory levels:
+\begin{lstlisting}    
+/
+ bin
+ usr
+   John
+     music
+   Jane
+     documents
+     programs
+\end{lstlisting}
+
+If we are currently in John's music directory (\lstinline{/usr/John/music}) and we want to refer to Jane's programs directory, we can denote that by an absolute path (\lstinline{/usr/Jane/programs/} -- start from the root, go to usr, go to Jane, go to programs) or a relative path (\lstinline{../../Jane/programs} -- start from John's music directory, go one directory up from the current directory (to \lstinline{/usr/John/}), go another directory up from the current directory (to \lstinline{/usr/}), go to Jane, go to programs).
+\end{subsection}
+
+\begin{subsection}{Commands}
+    In \lstinline{bash}, a typical command follows this arrangement:
+
+\begin{lstlisting}    
+[user@computer ~]$ man   -k   grep
+   |     |     |    |     |     |
+username |     | command  |     |
+   workstation |        option  |
+            location        argument        
+\end{lstlisting}
+
+    We see that we have a command (required), an option after a dash (optional), and an argument (optional/required depending on the command), all of which are separated by spaces. This format applies for all Unix/Linux commands within a typical Linux shell.\\
+    
+    \lstinline{bash} has a long history as to how it came about with that name, but we know that Unix users did not enjoy typing much. What we see often with \lstinline{bash} commands is that they're heavily abbreviated products of real, meaningful names. For instance, \lstinline{pwd} stands for Print Working Directory, \lstinline{man} stands for Manual, and \lstinline{grep} stands for Global Regular Expression Print. In the next section, we will explore some of these commands.
+
+\end{subsection}
+\end{articleSectionN}
+
+
+\section{Basic Bash Commands}
+\begin{articleSectionN}
+\noindent Let's explore the first set of commands we'll learn:\\
+
+\noindent\textbf{File Copy, Move, and Remove} (cp \emph{target\_file} \emph{destination}, mv \emph{target\_file} \emph{destination}, rm \emph{target\_file})
+\begin{lstlisting}
+[user@computer ~]$ cp somefile.ext somelocation
+[user@computer ~]$ mv somefile.ext somelocation
+[user@computer ~]$ rm somefile.ext
+\end{lstlisting}
+
+Here are some simple commands to handle files. For commands requiring a location, you can use a dot ( \lstinline{.} ) to reference your home directory or a forward slash ( \lstinline{/} ) to reference the root directory. For example: \lstinline{cp code.cpp .} will move the file code.cpp from the current directory to your home directory.
+
+\quad \\
+\noindent\textbf{Print Working Directory} (pwd)
+
+Prints the full path for the current directory.
+
+\begin{lstlisting}
+[user@computer ~]$ pwd
+/usr/user/home/
+\end{lstlisting}
+
+\quad \\
+\noindent\textbf{Directory Listing} (ls)
+
+Lists all the files within a given directory.
+
+\begin{lstlisting}
+[user@computer ~]$ ls
+Desktop  mail  mbox  public_html
+\end{lstlisting}
+    
+If no argument is provided, it will list the current directory's contents, excluding hidden files (unless the \lstinline{-a} option is used). Let's see what happens when we use the "show all" option \lstinline{-a}:
+    
+\begin{lstlisting}
+[user@computer ~]$ ls -a
+.              .config      .gconfd          .local    public_html  
+..             Desktop      .gnome2          mail      .qt
+.bash_history  .dmrc        .gnome2_private  mbox      .redhat
+.bash_logout   .emacs.d     .ICEauthority    .mcop     .viminfo
+.bash_profile  .fonts.conf  .kde             .mozilla  .Xauthority
+.bashrc        .gconf       .lesshst         .nx       .xcompmgrrc
+\end{lstlisting}
+    
+    The hidden files in the directory are denoted with a leading dot. Notice that in our \lstinline{ls -a} output, we have two directories that we haven't seen before: the \lstinline{.} directory (home folder) and the \lstinline{..} directory (one directory up).
+
+\quad \\
+\noindent\textbf{Change Current Directory} (cd \emph{destination})
+
+Changes the current directory to the argument.
+
+\begin{lstlisting}
+[user@computer ~]$ pwd
+/usr/user/home/
+[user@computer ~]$ cd /
+[user@computer ~]$ pwd
+/
+[user@computer ~]$ cd ~/music
+[user@computer ~]$ pwd
+/usr/user/home/music
+[user@computer ~]$ cd ../../../user2/
+[user@computer ~]$ pwd
+/usr/user2
+\end{lstlisting}
+
+\quad \\
+\noindent\textbf{Make/Remove Directory} (mkdir \emph{path}, rmdir \emph{path})
+
+Makes/removes a directory in the path provided.
+
+\begin{lstlisting}
+[user@computer ~]$ mkdir music
+[user@computer ~]$ ls -a
+.  ..  bin  dev  etc  home  mnt  music  proc  root  tmp  usr
+[user@computer ~]$ rmdir music
+[user@computer ~]$ ls -a
+.  ..  bin  dev  etc  home  mnt  proc  root  tmp  usr
+\end{lstlisting}
+
+To make or remove multiple directories, you can use a space between each directory name.
+
+\begin{lstlisting}
+[user@computer ~]$ mkdir music school_work pictures files
+[user@computer ~]$ ls -a
+.   bin  etc    home  music     proc  school_work  usr
+..  dev  files  mnt   pictures  root  tmp
+[user@computer ~]$ rmdir pictures school
+[user@computer ~]$ ls -a
+.  ..  bin  dev  etc  files  home  mnt  proc  root  school_work  tmp  usr
+\end{lstlisting}
+
+If you want to delete all directories that you created (assuming that they're empty), you can try using a * wildcard.
+
+\begin{lstlisting}
+[user@computer ~]$ rmdir *
+[user@computer ~]$ ls -a
+.  ..  bin  dev  etc  files  home  mnt  proc  root  school_work  tmp  usr
+[user@computer ~]$ ls -a
+.  ..
+\end{lstlisting}
+\newpage
+\quad \\
+\noindent\textbf{UNIX Manual Pages} (man \emph{command})
+
+Shows the documentation for the specified command.\\
+
+For example, let's say we're curious as to what the \lstinline{which} command does. We'll try entering \lstinline{man which} into \lstinline{bash} and be presented with a full screen of information, which we can exit out by typing \lstinline{q} then pressing Enter.
+
+One thing amazing about Unix/Linux is that almost every program in the system is well-documented through the \lstinline{man} pages. All \lstinline{man} pages will describe the behavior of the command and what arguments and options it will accept.
+
+\quad \\
+\noindent\textbf{Concatenate} (cat \emph{file})
+
+\noindent Prints the contents of a file.
+
+\begin{lstlisting}
+[user@computer ~]$ cat file.txt
+This is a test file with test data!
+cat is a wonderful command.
+\end{lstlisting}
+
+The \lstinline{cat} command is very useful for quickly checking the contents of a file without opening an editor, whether it may be a system information file (\lstinline{/proc/cpuinfo}) or a plain text file.
+\end{articleSectionN}
+
+\section{Advanced Bash Techniques}
+\begin{articleSectionN}
+\noindent The "commands" we will learn now are not entirely commands but are rather some new syntax which will introduce us to a new level of CLI usage. We explore new \lstinline{bash} syntax and ways of using them.\\
+
+\noindent\textbf{Output Redirection Operators} (\emph{command1} | \emph{command2}, \emph{command} > \emph{file}, \emph{command} \lstinline{>>} \emph{file})
+
+The pipe ( \lstinline{|} ) will redirect the resulting output of the first command as the input to the second command. The single chevron ( \lstinline{>} ) will write the output of the command to a file, overwriting anything inside of it. On the other hand, the double chevron ( \lstinline{>>} ) will append (add to the end) the output of the command to the file.
+
+\begin{lstlisting}
+[user@computer ~]$ cat /proc/cpuinfo | less
+<< full-screen of data >>
+
+[user@computer ~]$ cat sampletext
+This is a sample text file.
+[user@computer ~]$ cat sampletext2
+Another sample text file.
+[user@computer ~]$ cat sampletext2 >> sampletext
+[user@computer ~]$ cat sampletext
+This is a sample text file.
+Another sample text file.
+[user@computer ~]$ cat sampletext2 > sampletext
+[user@computer ~]$ cat sampletext
+Another sample text file.
+\end{lstlisting}
+
+\newpage
+
+\quad \\
+\noindent\textbf{Global regular expression print} (grep \emph{string})
+
+Prints the line that matches the regular expression string provided.
+
+\begin{lstlisting}
+[user@computer ~]$ cat /proc/partitions
+major minor  #blocks  name
+
+   8     0  214722560 sda
+   8     1  214716726 sda1
+   8    16   71567360 sdb
+   8    17     104391 sdb1
+   8    18   71457120 sdb2
+   8    32   71567360 sdc
+   8    33   16779861 sdc1
+   8    34   54781650 sdc2
+
+[user@computer ~]$ cat /proc/partitions | grep "sdc2"
+   8    34   54781650 sdc2
+\end{lstlisting}
+
+The \lstinline{grep} command is used to extract lines of interest from a large file. It is a very useful command that is almost always coupled with pipes. In our example above, instead of displaying a file with 10 lines of irrelevant information, we print only the lines that match the string we "grepped".
+
+A common option is the case insensitivity option ( \lstinline{-i} ). For example, the command \lstinline{cat somefile | grep -i "elEPHanT"} will display the lines of the file \lstinline{somefile} that contain any instance of the word "elephant" regardless of case.
+
+\quad \\
+\noindent\textbf{Less} (\emph{command} | less)
+
+Displays the output of the command in a scrollable window.
+
+\begin{lstlisting}
+[user@computer ~]$ cat /proc/cpuinfo | less
+\end{lstlisting}
+
+Instead of displaying a large text file through a \lstinline{cat} command in the console, piping the output to \lstinline{less} is common. The \lstinline{less} command converts the console into a simulated scrollable screen (which can be controlled by the up/down arrow or page up/down keys). Text files that are more than a screen's worth of lines can be displayed in a manageable manner this way.
+\end{articleSectionN}
+
+
+\section*{Conclusion}
+\begin{articleSectionN}
+Although what we covered is only intended to be a crash-course introduction to GNU/Linux, the information provided in this article should be sufficient to make a beginner become more or less of an "average" Linux user. The best way to learn this complicated yet powerful operating system is to simply play with its features, as that knowledge will grow well for the user.
+\end{articleSectionN}
+\newpage
+
+\section*{Additional Resources}
+\begin{articleSectionN}
+\begin{itemize}
+\item{\textbf{Ubuntu} \quad \emph{http://ubuntu.com}\\
+Ubuntu (pronounced ooh-BOON-tu) is a popular distribution that is relatively easy to install and is beginner friendly. As with most Linux distributions, Ubuntu is free to use and distribute, so I would suggest Ubuntu if you're curious about trying it on your system.}
+\item{\textbf{Slackbook} \quad \emph{http://slackbook.org/html/index.html}\\
+The "Slackbook" is an amazing guide put together by Linux veterans to assist new users of the Slackware distribution. The material presented in Slackbook is very practical, and most of the concepts presented are universal and not specific to just Slackware.}
+\item{\textbf{Google Code University} \quad \emph{http://code.google.com/edu/tools101/index.html}\\
+Google provides three great easy-to-follow tutorials on the material we covered as well as other topics of Linux. These guides are excellent for reinforcing what you've learned from this article.}
+\end{itemize}
+\end{articleSectionN}
+
+\section*{References}
+\begin{articleSectionN}
+\begin{enumerate}
+\item{Wheeler, David. "History of Unix, Linux, and Open Source / Free Software."\\
+< \emph{http://www.dwheeler.com/secure-programs/Secure-Programs-HOWTO/history.html} >.}
+\item{"Linux." Wikipedia, The Free Encyclopedia.\\
+< \emph{http://en.wikipedia.org/w/index.php?title=Linux\&oldid=325431047} >. }
+\item{"Linux distribution." Wikipedia, The Free Encyclopedia.\\
+< \emph{http://en.wikipedia.org/w/index.php?title=Linux\_distribution\&oldid=325234422} >. }
+\item{"Slackbook, Slackware Linux Essentials." Slackware Linux Inc. \\
+< \emph{http://slackbook.org/html/index.html} >.}
+\item{"Basic Linux Commands." Google Code University. Google Inc.\\
+< \emph{http://code.google.com/edu/tools101/linux/basics.html} >. }
+\item{"File System Layout." "Slackbook, Slackware Linux Essentials." Slackware Linux Inc.\\
+< \emph{http://slackbook.org/html/system-configuration.html} >. }
+\end{enumerate}
+\end{articleSectionN}
+
+\section*{}
+\emph{This document was last revised \lastUpdated.}
+
+
+\end{document}
